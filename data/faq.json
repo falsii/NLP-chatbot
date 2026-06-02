@@ -1,0 +1,122 @@
+[
+  {
+    "id": 1,
+    "category": "account",
+    "question": "How do I create an account?",
+    "answer": "You can create an account by clicking the Sign Up button and filling in the required details."
+  },
+  {
+    "id": 2,
+    "category": "account",
+    "question": "How do I reset my password?",
+    "answer": "You can reset your password by clicking Forgot Password on the login page and following the instructions."
+  },
+  {
+    "id": 3,
+    "category": "account",
+    "question": "How do I change my email address?",
+    "answer": "You can change your email address from your account settings if this option is available."
+  },
+  {
+    "id": 4,
+    "category": "account",
+    "question": "How do I delete my account?",
+    "answer": "You can request account deletion from your account settings or contact support for help."
+  },
+  {
+    "id": 5,
+    "category": "pricing",
+    "question": "Do you have a free plan?",
+    "answer": "Please check the pricing page to see whether a free plan is currently available."
+  },
+  {
+    "id": 6,
+    "category": "pricing",
+    "question": "How much does the product cost?",
+    "answer": "The product cost depends on the selected plan. Please visit the pricing page for current plan details."
+  },
+  {
+    "id": 7,
+    "category": "pricing",
+    "question": "Do you offer monthly and yearly plans?",
+    "answer": "Some products offer monthly and yearly plans. Please check the pricing section for available billing options."
+  },
+  {
+    "id": 8,
+    "category": "pricing",
+    "question": "Can I cancel my subscription?",
+    "answer": "You can usually cancel your subscription from billing settings. If you need help, contact support."
+  },
+  {
+    "id": 9,
+    "category": "features",
+    "question": "What features does the product provide?",
+    "answer": "The product helps users understand features, get guidance, view pricing information, and contact support when needed."
+  },
+  {
+    "id": 10,
+    "category": "features",
+    "question": "How can the product help me?",
+    "answer": "The product can help you find the right feature, understand how it works, and get basic support information."
+  },
+  {
+    "id": 11,
+    "category": "features",
+    "question": "Can the product guide me to the correct feature?",
+    "answer": "Yes, the product is designed to guide users to the correct feature based on their needs."
+  },
+  {
+    "id": 12,
+    "category": "support",
+    "question": "How do I contact support?",
+    "answer": "You can contact support from the support section or help page of the product."
+  },
+  {
+    "id": 13,
+    "category": "support",
+    "question": "What should I do if something is not working?",
+    "answer": "If something is not working, try refreshing the page first. If the issue continues, contact support with details about the problem."
+  },
+  {
+    "id": 14,
+    "category": "support",
+    "question": "How do I report a bug?",
+    "answer": "You can report a bug from the support section by describing the issue, steps to reproduce it, and any error messages."
+  },
+  {
+    "id": 15,
+    "category": "support",
+    "question": "Where can I get technical help?",
+    "answer": "You can get technical help from the support or help section of the product."
+  },
+  {
+    "id": 16,
+    "category": "billing",
+    "question": "Where can I see my billing details?",
+    "answer": "Billing details are usually available in the billing or subscription section of your account settings."
+  },
+  {
+    "id": 17,
+    "category": "billing",
+    "question": "How do I update my payment method?",
+    "answer": "You can update your payment method from the billing section of your account settings."
+  },
+  {
+    "id": 18,
+    "category": "billing",
+    "question": "Why was I charged?",
+    "answer": "You may have been charged because of an active subscription or plan renewal. Please check your billing section for details."
+  },
+  {
+    "id": 19,
+    "category": "security",
+    "question": "Is my data safe?",
+    "answer": "The product should follow standard security practices to protect user data. Avoid sharing sensitive personal information in chat."
+  },
+  {
+    "id": 20,
+    "category": "security",
+    "question": "Should I share my password with support?",
+    "answer": "No. You should never share your password with anyone, including support."
+  }
+]

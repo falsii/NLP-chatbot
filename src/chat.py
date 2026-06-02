@@ -7,6 +7,7 @@ import torch
 from nltk_utils import tokenize, bag_of_words
 from model import NeuralNet
 from rules import apply_rules
+from retrieval import load_retriever
 
 
 DEBUG_MODE = True
@@ -44,7 +45,9 @@ def load_chatbot():
     model.load_state_dict(model_state)
     model.eval()
 
-    return model, intents, all_words, tags, device
+    retriever = load_retriever(base_dir)
+
+    return model, intents, all_words, tags, device, retriever
 
 
 def get_intent_response(predicted_tag, intents):
@@ -82,12 +85,85 @@ def get_model_prediction(user_message, model, all_words, tags, device):
     return predicted_tag, confidence_score
 
 
-def predict_chatbot(user_message, model, intents, all_words, tags, device):
+def should_use_faq_retrieval(user_message, predicted_tag=None):
     """
-    Returns full chatbot prediction details.
-    Useful for evaluation, API, and debugging.
+    Decide when to try FAQ retrieval.
+
+    We do not want FAQ retrieval for simple greetings, goodbye, thanks, etc.
     """
 
+    message = user_message.lower().strip()
+
+    faq_question_words = [
+        "how",
+        "what",
+        "where",
+        "when",
+        "why",
+        "can",
+        "do",
+        "does",
+        "is",
+        "are"
+    ]
+
+    faq_related_keywords = [
+        "account",
+        "password",
+        "email",
+        "delete",
+        "price",
+        "pricing",
+        "cost",
+        "plan",
+        "subscription",
+        "billing",
+        "payment",
+        "feature",
+        "support",
+        "bug",
+        "issue",
+        "data",
+        "security"
+    ]
+
+    non_faq_intents = [
+        "greetings",
+        "goodbye",
+        "thanks",
+        "confirmation",
+        "negative_confirmation",
+        "small_talk",
+        "bot_identity",
+        "abusive_language",
+        "sensitive_content"
+    ]
+
+    if predicted_tag in non_faq_intents:
+        return False
+
+    if any(message.startswith(word + " ") for word in faq_question_words):
+        return True
+
+    if any(keyword in message for keyword in faq_related_keywords):
+        return True
+
+    return False
+
+
+def predict_chatbot(user_message, model, intents, all_words, tags, device, retriever):
+    """
+    Main prediction function.
+
+    Flow:
+    1. Rule-based safety and shortcut checks
+    2. PyTorch intent prediction
+    3. FAQ retrieval for suitable questions
+    4. Confidence fallback
+    5. Intent response
+    """
+
+    # Step 1: Rule-based layer
     rule_result = apply_rules(user_message)
 
     if rule_result.get("handled"):
@@ -96,9 +172,12 @@ def predict_chatbot(user_message, model, intents, all_words, tags, device):
             "response": rule_result["response"],
             "intent": rule_result["intent"],
             "confidence": rule_result["confidence"],
-            "source": rule_result["source"]
+            "source": rule_result["source"],
+            "faq_match_score": None,
+            "faq_question": None
         }
 
+    # Step 2: Model prediction
     predicted_tag, confidence = get_model_prediction(
         user_message=user_message,
         model=model,
@@ -107,6 +186,22 @@ def predict_chatbot(user_message, model, intents, all_words, tags, device):
         device=device
     )
 
+    # Step 3: FAQ retrieval
+    if should_use_faq_retrieval(user_message, predicted_tag):
+        faq_result = retriever.search(user_message)
+
+        if faq_result["matched"]:
+            return {
+                "message": user_message,
+                "response": faq_result["answer"],
+                "intent": predicted_tag,
+                "confidence": confidence,
+                "source": "faq_retrieval",
+                "faq_match_score": faq_result["score"],
+                "faq_question": faq_result["question"]
+            }
+
+    # Step 4: Confidence fallback
     confidence_threshold = 0.85
 
     if confidence < confidence_threshold:
@@ -115,9 +210,12 @@ def predict_chatbot(user_message, model, intents, all_words, tags, device):
             "response": "I am not sure about that. Could you please explain it in another way?",
             "intent": "unknown",
             "confidence": confidence,
-            "source": "model_low_confidence"
+            "source": "model_low_confidence",
+            "faq_match_score": None,
+            "faq_question": None
         }
 
+    # Step 5: Intent-based response
     response = get_intent_response(predicted_tag, intents)
 
     return {
@@ -125,32 +223,43 @@ def predict_chatbot(user_message, model, intents, all_words, tags, device):
         "response": response,
         "intent": predicted_tag,
         "confidence": confidence,
-        "source": "model"
+        "source": "model",
+        "faq_match_score": None,
+        "faq_question": None
     }
 
 
-def get_response(user_message, model, intents, all_words, tags, device):
+def get_response(user_message, model, intents, all_words, tags, device, retriever):
     result = predict_chatbot(
         user_message=user_message,
         model=model,
         intents=intents,
         all_words=all_words,
         tags=tags,
-        device=device
+        device=device,
+        retriever=retriever
     )
 
     if DEBUG_MODE:
-        print(
+        debug_text = (
             f"DEBUG: source={result['source']} "
             f"intent={result['intent']} "
             f"confidence={result['confidence']:.2f}"
         )
 
+        if result.get("faq_match_score") is not None:
+            debug_text += f" faq_score={result['faq_match_score']:.2f}"
+
+        if result.get("faq_question"):
+            debug_text += f" faq_question='{result['faq_question']}'"
+
+        print(debug_text)
+
     return result["response"]
 
 
 def main():
-    model, intents, all_words, tags, device = load_chatbot()
+    model, intents, all_words, tags, device, retriever = load_chatbot()
 
     print("Bot is ready! Type 'quit' to exit.")
 
@@ -167,7 +276,8 @@ def main():
             intents=intents,
             all_words=all_words,
             tags=tags,
-            device=device
+            device=device,
+            retriever=retriever
         )
 
         print(f"Bot: {response}")

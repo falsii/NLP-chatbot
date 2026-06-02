@@ -17,7 +17,7 @@ def evaluate():
 
     test_questions = load_test_questions(base_dir)
 
-    model, intents, all_words, tags, device = load_chatbot()
+    model, intents, all_words, tags, device, retriever = load_chatbot()
 
     total = len(test_questions)
     correct = 0
@@ -37,7 +37,8 @@ def evaluate():
             intents=intents,
             all_words=all_words,
             tags=tags,
-            device=device
+            device=device,
+            retriever=retriever
         )
 
         predicted_intent = result["intent"]

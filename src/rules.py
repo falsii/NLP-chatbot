@@ -24,9 +24,6 @@ def contains_any(text, keywords):
 def safety_rule_response(user_message):
     """
     Handles sensitive or unsafe user messages before the ML model.
-
-    This prevents the model from accidentally giving a wrong response
-    for medical, legal, financial, personal data, or abusive messages.
     """
 
     message = normalize_text(user_message)
@@ -73,12 +70,30 @@ def safety_rule_response(user_message):
     personal_data_keywords = [
         "personal information",
         "private data",
-        "password",
-        "phone number",
-        "email address",
         "home address",
         "credit card",
         "bank account"
+    ]
+
+    dangerous_password_phrases = [
+        "give me password",
+        "show me password",
+        "find password",
+        "hack password",
+        "steal password",
+        "someone password",
+        "someone's password",
+        "get password",
+        "share password"
+    ]
+
+    dangerous_email_phrases = [
+        "give me email address",
+        "show me email address",
+        "find email address",
+        "someone email address",
+        "someone's email address",
+        "private email address"
     ]
 
     offensive_keywords = [
@@ -116,6 +131,8 @@ def safety_rule_response(user_message):
         or contains_any(message, legal_keywords)
         or contains_any(message, financial_keywords)
         or contains_any(message, personal_data_keywords)
+        or contains_any(message, dangerous_password_phrases)
+        or contains_any(message, dangerous_email_phrases)
         or contains_any(message, offensive_keywords)
     ):
         return {
