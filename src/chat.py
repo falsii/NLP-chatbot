@@ -82,26 +82,22 @@ def get_model_prediction(user_message, model, all_words, tags, device):
     return predicted_tag, confidence_score
 
 
-def get_response(user_message, model, intents, all_words, tags, device):
+def predict_chatbot(user_message, model, intents, all_words, tags, device):
     """
-    Main chatbot response function.
-
-    Step 1: Apply rule-based layer.
-    Step 2: If no rule matches, use PyTorch model.
-    Step 3: If confidence is low, return unknown response.
+    Returns full chatbot prediction details.
+    Useful for evaluation, API, and debugging.
     """
 
     rule_result = apply_rules(user_message)
 
     if rule_result.get("handled"):
-        if DEBUG_MODE:
-            print(
-                f"DEBUG: source={rule_result['source']} "
-                f"intent={rule_result['intent']} "
-                f"confidence={rule_result['confidence']:.2f}"
-            )
-
-        return rule_result["response"]
+        return {
+            "message": user_message,
+            "response": rule_result["response"],
+            "intent": rule_result["intent"],
+            "confidence": rule_result["confidence"],
+            "source": rule_result["source"]
+        }
 
     predicted_tag, confidence = get_model_prediction(
         user_message=user_message,
@@ -111,19 +107,46 @@ def get_response(user_message, model, intents, all_words, tags, device):
         device=device
     )
 
-    if DEBUG_MODE:
-        print(
-            f"DEBUG: source=model "
-            f"intent={predicted_tag} "
-            f"confidence={confidence:.2f}"
-        )
-
     confidence_threshold = 0.85
 
     if confidence < confidence_threshold:
-        return "I am not sure about that. Could you please explain it in another way?"
+        return {
+            "message": user_message,
+            "response": "I am not sure about that. Could you please explain it in another way?",
+            "intent": "unknown",
+            "confidence": confidence,
+            "source": "model_low_confidence"
+        }
 
-    return get_intent_response(predicted_tag, intents)
+    response = get_intent_response(predicted_tag, intents)
+
+    return {
+        "message": user_message,
+        "response": response,
+        "intent": predicted_tag,
+        "confidence": confidence,
+        "source": "model"
+    }
+
+
+def get_response(user_message, model, intents, all_words, tags, device):
+    result = predict_chatbot(
+        user_message=user_message,
+        model=model,
+        intents=intents,
+        all_words=all_words,
+        tags=tags,
+        device=device
+    )
+
+    if DEBUG_MODE:
+        print(
+            f"DEBUG: source={result['source']} "
+            f"intent={result['intent']} "
+            f"confidence={result['confidence']:.2f}"
+        )
+
+    return result["response"]
 
 
 def main():

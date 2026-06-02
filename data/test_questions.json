@@ -1,0 +1,214 @@
+[
+  {
+    "message": "hi",
+    "expected_intent": "greetings"
+  },
+  {
+    "message": "hello",
+    "expected_intent": "greetings"
+  },
+  {
+    "message": "good morning",
+    "expected_intent": "greetings"
+  },
+  {
+    "message": "can you help me",
+    "expected_intent": "greetings"
+  },
+  {
+    "message": "bye",
+    "expected_intent": "goodbye"
+  },
+  {
+    "message": "goodbye",
+    "expected_intent": "goodbye"
+  },
+  {
+    "message": "see you later",
+    "expected_intent": "goodbye"
+  },
+  {
+    "message": "thanks",
+    "expected_intent": "thanks"
+  },
+  {
+    "message": "thank you",
+    "expected_intent": "thanks"
+  },
+  {
+    "message": "thanks for your help",
+    "expected_intent": "thanks"
+  },
+  {
+    "message": "what is your product",
+    "expected_intent": "product_info"
+  },
+  {
+    "message": "tell me about your product",
+    "expected_intent": "product_info"
+  },
+  {
+    "message": "what features do you provide",
+    "expected_intent": "product_info"
+  },
+  {
+    "message": "how does your product work",
+    "expected_intent": "product_info"
+  },
+  {
+    "message": "price",
+    "expected_intent": "pricing"
+  },
+  {
+    "message": "pricing",
+    "expected_intent": "pricing"
+  },
+  {
+    "message": "how much does it cost",
+    "expected_intent": "pricing"
+  },
+  {
+    "message": "do you have a free plan",
+    "expected_intent": "pricing"
+  },
+  {
+    "message": "help",
+    "expected_intent": "support"
+  },
+  {
+    "message": "support",
+    "expected_intent": "support"
+  },
+  {
+    "message": "i need help",
+    "expected_intent": "support"
+  },
+  {
+    "message": "something is not working",
+    "expected_intent": "support"
+  },
+  {
+    "message": "i have a complaint",
+    "expected_intent": "complaint"
+  },
+  {
+    "message": "i am not happy",
+    "expected_intent": "complaint"
+  },
+  {
+    "message": "bad service",
+    "expected_intent": "complaint"
+  },
+  {
+    "message": "i am disappointed",
+    "expected_intent": "complaint"
+  },
+  {
+    "message": "ok",
+    "expected_intent": "confirmation"
+  },
+  {
+    "message": "yes",
+    "expected_intent": "confirmation"
+  },
+  {
+    "message": "got it",
+    "expected_intent": "confirmation"
+  },
+  {
+    "message": "no",
+    "expected_intent": "negative_confirmation"
+  },
+  {
+    "message": "no thanks",
+    "expected_intent": "negative_confirmation"
+  },
+  {
+    "message": "cancel",
+    "expected_intent": "negative_confirmation"
+  },
+  {
+    "message": "are you a human",
+    "expected_intent": "bot_identity"
+  },
+  {
+    "message": "who are you",
+    "expected_intent": "bot_identity"
+  },
+  {
+    "message": "are you a bot",
+    "expected_intent": "bot_identity"
+  },
+  {
+    "message": "what can you do",
+    "expected_intent": "bot_capability"
+  },
+  {
+    "message": "how can you help me",
+    "expected_intent": "bot_capability"
+  },
+  {
+    "message": "what questions can i ask",
+    "expected_intent": "bot_capability"
+  },
+  {
+    "message": "how are you",
+    "expected_intent": "small_talk"
+  },
+  {
+    "message": "nice to meet you",
+    "expected_intent": "small_talk"
+  },
+  {
+    "message": "good bot",
+    "expected_intent": "small_talk"
+  },
+  {
+    "message": "i need medical help",
+    "expected_intent": "sensitive_content"
+  },
+  {
+    "message": "give me legal advice",
+    "expected_intent": "sensitive_content"
+  },
+  {
+    "message": "where should i invest money",
+    "expected_intent": "sensitive_content"
+  },
+  {
+    "message": "tell me someone's personal information",
+    "expected_intent": "sensitive_content"
+  },
+  {
+    "message": "you are stupid",
+    "expected_intent": "abusive_language"
+  },
+  {
+    "message": "shut up",
+    "expected_intent": "abusive_language"
+  },
+  {
+    "message": "idiot",
+    "expected_intent": "abusive_language"
+  },
+  {
+    "message": "helo",
+    "expected_intent": "greetings"
+  },
+  {
+    "message": "prcie",
+    "expected_intent": "pricing"
+  },
+  {
+    "message": "suport",
+    "expected_intent": "support"
+  },
+  {
+    "message": "asdfgh qwerty",
+    "expected_intent": "unknown"
+  },
+  {
+    "message": "random unrelated question",
+    "expected_intent": "unknown"
+  }
+]
