@@ -6,6 +6,10 @@ import torch
 
 from nltk_utils import tokenize, bag_of_words
 from model import NeuralNet
+from rules import apply_rules
+
+
+DEBUG_MODE = True
 
 
 def load_chatbot():
@@ -43,7 +47,23 @@ def load_chatbot():
     return model, intents, all_words, tags, device
 
 
-def get_response(user_message, model, intents, all_words, tags, device):
+def get_intent_response(predicted_tag, intents):
+    """
+    Return random response for predicted intent.
+    """
+
+    for intent in intents["intents"]:
+        if intent["tag"] == predicted_tag:
+            return random.choice(intent["responses"])
+
+    return "I don't know the answer to that yet."
+
+
+def get_model_prediction(user_message, model, all_words, tags, device):
+    """
+    Predict intent using PyTorch model.
+    """
+
     sentence = tokenize(user_message)
     x = bag_of_words(sentence, all_words)
 
@@ -53,22 +73,57 @@ def get_response(user_message, model, intents, all_words, tags, device):
     with torch.no_grad():
         output = model(x)
 
-    _, predicted = torch.max(output, dim=1)
-    predicted_tag = tags[predicted.item()]
-
     probabilities = torch.softmax(output, dim=1)
-    confidence = probabilities[0][predicted.item()].item()
+    confidence, predicted = torch.max(probabilities, dim=1)
 
-    confidence_threshold = 0.75
+    predicted_tag = tags[predicted.item()]
+    confidence_score = confidence.item()
+
+    return predicted_tag, confidence_score
+
+
+def get_response(user_message, model, intents, all_words, tags, device):
+    """
+    Main chatbot response function.
+
+    Step 1: Apply rule-based layer.
+    Step 2: If no rule matches, use PyTorch model.
+    Step 3: If confidence is low, return unknown response.
+    """
+
+    rule_result = apply_rules(user_message)
+
+    if rule_result.get("handled"):
+        if DEBUG_MODE:
+            print(
+                f"DEBUG: source={rule_result['source']} "
+                f"intent={rule_result['intent']} "
+                f"confidence={rule_result['confidence']:.2f}"
+            )
+
+        return rule_result["response"]
+
+    predicted_tag, confidence = get_model_prediction(
+        user_message=user_message,
+        model=model,
+        all_words=all_words,
+        tags=tags,
+        device=device
+    )
+
+    if DEBUG_MODE:
+        print(
+            f"DEBUG: source=model "
+            f"intent={predicted_tag} "
+            f"confidence={confidence:.2f}"
+        )
+
+    confidence_threshold = 0.85
 
     if confidence < confidence_threshold:
         return "I am not sure about that. Could you please explain it in another way?"
 
-    for intent in intents["intents"]:
-        if intent["tag"] == predicted_tag:
-            return random.choice(intent["responses"])
-
-    return "I don't know the answer to that yet."
+    return get_intent_response(predicted_tag, intents)
 
 
 def main():
@@ -79,7 +134,7 @@ def main():
     while True:
         user_message = input("You: ")
 
-        if user_message.lower() in ["quit", "exit", "bye"]:
+        if user_message.lower().strip() in ["quit", "exit"]:
             print("Bot: Goodbye! Have a great day.")
             break
 
