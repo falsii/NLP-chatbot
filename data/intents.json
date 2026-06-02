@@ -1,0 +1,469 @@
+{
+  "intents": [
+    {
+      "tag": "greetings",
+      "patterns": [
+        "hi",
+        "hello",
+        "hey",
+        "hello there",
+        "hi there",
+        "hey there",
+        "good morning",
+        "good afternoon",
+        "good evening",
+        "is anyone there",
+        "anyone there",
+        "can you hear me",
+        "are you there",
+        "start",
+        "let's start",
+        "i want to talk",
+        "i need assistance",
+        "can you help me",
+        "help me",
+        "hello bot"
+      ],
+      "responses": [
+        "Hello! How can I help you today?",
+        "Hi there! What would you like to know?",
+        "Hey! I am here to help you.",
+        "Hello! Please tell me what you need help with."
+      ]
+    },
+    {
+      "tag": "goodbye",
+      "patterns": [
+        "bye",
+        "goodbye",
+        "see you",
+        "see you later",
+        "talk to you later",
+        "catch you later",
+        "exit",
+        "quit",
+        "close",
+        "stop",
+        "end chat",
+        "that's all",
+        "that is all",
+        "no more questions",
+        "i am done",
+        "thanks bye",
+        "okay bye",
+        "bye for now",
+        "good night",
+        "take care"
+      ],
+      "responses": [
+        "Goodbye! Have a great day.",
+        "Bye! Feel free to come back anytime.",
+        "See you later!",
+        "Goodbye! I was happy to help."
+      ]
+    },
+    {
+      "tag": "thanks",
+      "patterns": [
+        "thanks",
+        "thank you",
+        "thank you so much",
+        "thanks a lot",
+        "many thanks",
+        "appreciate it",
+        "i appreciate your help",
+        "that helped",
+        "very helpful",
+        "nice thanks",
+        "ok thanks",
+        "okay thanks",
+        "great thank you",
+        "thanks for your help",
+        "thank you for helping me",
+        "awesome thanks",
+        "cool thanks",
+        "perfect thanks",
+        "good thanks",
+        "that was useful"
+      ],
+      "responses": [
+        "You're welcome!",
+        "Happy to help!",
+        "No problem. Let me know if you need anything else.",
+        "Glad I could help."
+      ]
+    },
+    {
+      "tag": "product_info",
+      "patterns": [
+        "what is your product",
+        "tell me about your product",
+        "what does this product do",
+        "how does your product work",
+        "explain your product",
+        "product details",
+        "product information",
+        "what features do you provide",
+        "what can your product do",
+        "how can this product help me",
+        "guide me to the correct feature",
+        "show me product features",
+        "tell me product features",
+        "what is this app about",
+        "what is this platform about",
+        "how does this app help users",
+        "why should i use this product",
+        "what are the main features",
+        "explain the main features",
+        "what problem does your product solve"
+      ],
+      "responses": [
+        "Our product helps users find the right feature and understand how to use it.",
+        "This product is designed to guide users, answer product-related questions, and help them choose the correct feature.",
+        "You can ask me about product features, pricing, support, or common issues.",
+        "I can help explain the product and guide you to the most relevant feature."
+      ]
+    },
+    {
+      "tag": "pricing",
+      "patterns": [
+        "price",
+        "pricing",
+        "cost",
+        "how much does it cost",
+        "what is the price",
+        "tell me the pricing",
+        "pricing details",
+        "subscription cost",
+        "monthly price",
+        "yearly price",
+        "is it free",
+        "do you have a free plan",
+        "what are your plans",
+        "how much should i pay",
+        "do i need to pay",
+        "payment plan",
+        "paid plan",
+        "free trial",
+        "is there any trial",
+        "what is the subscription price",
+        "what are the charges",
+        "how much is the monthly plan",
+        "how much is the yearly plan",
+        "show me available plans"
+      ],
+      "responses": [
+        "You can check the pricing section to see available plans and costs.",
+        "Our pricing depends on the selected plan. Please visit the pricing page for full details.",
+        "We may offer different plans based on user needs. The pricing page has the latest details.",
+        "For pricing information, please check the pricing section or contact support."
+      ]
+    },
+    {
+      "tag": "support",
+      "patterns": [
+        "help",
+        "support",
+        "i need help",
+        "can you help me",
+        "i need support",
+        "contact support",
+        "how can i get help",
+        "where can i get support",
+        "technical help",
+        "i have a problem",
+        "something is not working",
+        "help me with an issue",
+        "customer support",
+        "i need technical support",
+        "can i talk to support",
+        "how do i contact your team",
+        "i am facing an issue",
+        "please help me",
+        "i need assistance",
+        "support team",
+        "where is support",
+        "i want help with the product",
+        "guide me",
+        "i am stuck"
+      ],
+      "responses": [
+        "Sure, I can help. Please tell me what issue you are facing.",
+        "I am here to help. Can you describe the problem?",
+        "Please share more details about the issue so I can guide you.",
+        "For support, tell me what is not working or what you need help with."
+      ]
+    },
+    {
+      "tag": "complaint",
+      "patterns": [
+        "i am not happy",
+        "this is bad",
+        "bad service",
+        "i have a complaint",
+        "i want to complain",
+        "not satisfied",
+        "this is not working properly",
+        "i am disappointed",
+        "poor experience",
+        "your product is not good",
+        "i faced a problem",
+        "this issue is frustrating",
+        "i am upset",
+        "i am angry",
+        "i had a bad experience",
+        "this is not useful",
+        "i don't like this product",
+        "i am facing too many problems",
+        "very bad experience",
+        "i want to report an issue",
+        "this service is poor",
+        "i am not satisfied with this",
+        "this is annoying",
+        "i want to give feedback"
+      ],
+      "responses": [
+        "I am sorry to hear that. Please explain the issue so we can help you better.",
+        "I understand your concern. Can you share more details about what happened?",
+        "Sorry for the inconvenience. Please tell me the problem and I will try to guide you.",
+        "Thank you for sharing your feedback. Please describe the issue in detail."
+      ]
+    },
+    {
+      "tag": "confirmation",
+      "patterns": [
+        "ok",
+        "okay",
+        "yes",
+        "yeah",
+        "yep",
+        "sure",
+        "alright",
+        "fine",
+        "got it",
+        "understood",
+        "sounds good",
+        "correct",
+        "right",
+        "that is correct",
+        "yes correct",
+        "okay sure",
+        "yes please",
+        "go ahead",
+        "continue",
+        "carry on"
+      ],
+      "responses": [
+        "Okay.",
+        "Got it.",
+        "Great. Let me know what you need next.",
+        "Understood."
+      ]
+    },
+    {
+      "tag": "negative_confirmation",
+      "patterns": [
+        "no",
+        "nope",
+        "not now",
+        "not really",
+        "no thanks",
+        "no thank you",
+        "i don't want that",
+        "do not continue",
+        "stop that",
+        "cancel",
+        "leave it",
+        "forget it",
+        "nothing",
+        "not needed",
+        "i do not need help",
+        "i don't need help",
+        "no need",
+        "that's not correct",
+        "wrong",
+        "incorrect"
+      ],
+      "responses": [
+        "Okay, no problem.",
+        "Understood. Let me know if you need anything else.",
+        "No worries.",
+        "Alright. I will not continue with that."
+      ]
+    },
+    {
+      "tag": "bot_identity",
+      "patterns": [
+        "are you a human",
+        "are you human",
+        "are you a real person",
+        "are you a bot",
+        "are you chatbot",
+        "are you a chatbot",
+        "who are you",
+        "what are you",
+        "are you real",
+        "am i talking to a human",
+        "am i talking to a person",
+        "am i talking to a bot",
+        "are you an ai",
+        "are you a robot",
+        "tell me about yourself",
+        "is this a human chat",
+        "is this an automated chat",
+        "are you automated",
+        "what is your identity",
+        "who am i chatting with"
+      ],
+      "responses": [
+        "I am a chatbot, not a human. I am here to help you.",
+        "I am an offline chatbot created to answer basic questions and guide users.",
+        "I am not a real person. I am a chatbot trained to understand simple messages."
+      ]
+    },
+    {
+      "tag": "bot_capability",
+      "patterns": [
+        "what can you do",
+        "how can you help me",
+        "what help can you provide",
+        "what are your features",
+        "what questions can i ask",
+        "what do you support",
+        "what are you able to do",
+        "can you guide me",
+        "can you explain product features",
+        "can you help with pricing",
+        "can you help with support",
+        "show me what you can do",
+        "what topics can you answer",
+        "what can i ask you",
+        "how do you work",
+        "what is your purpose",
+        "what are you made for",
+        "can you answer product questions",
+        "can you answer general questions",
+        "can you help users"
+      ],
+      "responses": [
+        "I can answer basic product questions, explain pricing, guide you to features, and help with support-related questions.",
+        "You can ask me about product information, pricing, support, complaints, or general help.",
+        "I can classify your question and reply with a predefined response based on the topic."
+      ]
+    },
+    {
+      "tag": "small_talk",
+      "patterns": [
+        "how are you",
+        "how are you doing",
+        "how is it going",
+        "are you okay",
+        "are you fine",
+        "what's up",
+        "whats up",
+        "nice to meet you",
+        "good to see you",
+        "you are good",
+        "you are helpful",
+        "you are nice",
+        "great bot",
+        "good bot",
+        "nice bot",
+        "i like you",
+        "you are smart",
+        "you are amazing",
+        "that's nice",
+        "cool"
+      ],
+      "responses": [
+        "I am doing well and ready to help you.",
+        "I am here and ready to assist you.",
+        "Thanks! How can I help you today?",
+        "Nice to talk with you. What would you like to know?"
+      ]
+    },
+    {
+      "tag": "sensitive_content",
+      "patterns": [
+        "i need medical help",
+        "give me medical advice",
+        "what medicine should i take",
+        "which medicine is best",
+        "diagnose my illness",
+        "i have chest pain",
+        "i need legal advice",
+        "can i sue someone",
+        "should i file a case",
+        "give me financial advice",
+        "where should i invest money",
+        "which stock should i buy",
+        "how can i make money fast",
+        "tell me someone's personal information",
+        "share private data",
+        "give me personal details",
+        "help me with offensive content",
+        "write hateful content",
+        "give me someone's password",
+        "find private information"
+      ],
+      "responses": [
+        "I am sorry, but I cannot help with medical, legal, financial, offensive, or personal data-related requests. Please contact a qualified professional if needed.",
+        "I cannot provide help on sensitive topics like medical, legal, financial advice, offensive content, or personal information.",
+        "For sensitive matters, please contact a qualified professional or trusted authority."
+      ]
+    },
+    {
+      "tag": "abusive_language",
+      "patterns": [
+        "you are stupid",
+        "shut up",
+        "idiot",
+        "you are useless",
+        "bad bot",
+        "nonsense bot",
+        "you are dumb",
+        "stupid bot",
+        "useless chatbot",
+        "you are terrible",
+        "this bot is trash",
+        "you are bad",
+        "dumb bot",
+        "foolish bot",
+        "worst bot",
+        "i hate you",
+        "you are annoying",
+        "stop talking nonsense",
+        "you are not useful",
+        "rubbish bot"
+      ],
+      "responses": [
+        "Please use respectful language so I can help you.",
+        "I am here to help, but please keep the conversation respectful.",
+        "Let's keep the conversation polite so I can assist you better."
+      ]
+    },
+    {
+      "tag": "unknown",
+      "patterns": [
+        "random text",
+        "i do not know what to ask",
+        "something else",
+        "this is different",
+        "unrelated question",
+        "not sure",
+        "i am confused",
+        "asdfgh",
+        "qwerty",
+        "blah blah",
+        "unknown question",
+        "other topic"
+      ],
+      "responses": [
+        "I am not sure about that. Could you please explain it in another way?",
+        "I don't know the answer to that yet.",
+        "Sorry, I could not understand. Can you rephrase your question?",
+        "I am still learning. Please ask in a different way."
+      ]
+    }
+  ]
+}
