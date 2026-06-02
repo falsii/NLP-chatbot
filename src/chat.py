@@ -24,11 +24,19 @@ def load_chatbot():
     input_size = data["input_size"]
     hidden_size = data["hidden_size"]
     output_size = data["output_size"]
+    dropout_rate = data.get("dropout_rate", 0.2)
+
     all_words = data["all_words"]
     tags = data["tags"]
     model_state = data["model_state"]
 
-    model = NeuralNet(input_size, hidden_size, output_size).to(device)
+    model = NeuralNet(
+        input_size=input_size,
+        hidden_size=hidden_size,
+        output_size=output_size,
+        dropout_rate=dropout_rate
+    ).to(device)
+
     model.load_state_dict(model_state)
     model.eval()
 

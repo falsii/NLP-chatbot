@@ -1,49 +1,67 @@
-import numpy as np
-import nltk
-from nltk.stem.porter import PorterStemmer
+import re
 import string
+import numpy as np
+from nltk.stem.porter import PorterStemmer
+
 
 stemmer = PorterStemmer()
 
 
 def tokenize(sentence):
     """
-    Split sentence into words/tokens.
+    Convert sentence into clean word tokens.
+
     Example:
-    "Hello, how are you?" -> ["Hello", ",", "how", "are", "you", "?"]
+    "What's your pricing?" -> ["what", "s", "your", "pricing"]
     """
-    return nltk.word_tokenize(sentence)
+
+    sentence = sentence.lower()
+
+    # Keep only words and numbers
+    tokens = re.findall(r"\b[a-zA-Z0-9]+\b", sentence)
+
+    return tokens
 
 
 def stem(word):
     """
     Convert word to root form.
+
     Example:
     "pricing" -> "price"
     "running" -> "run"
     """
+
     return stemmer.stem(word.lower())
 
 
-def clean_tokens(tokens):
+def normalize_sentence(sentence):
     """
-    Remove punctuation tokens.
+    Clean and normalize user sentence.
     """
-    return [token for token in tokens if token not in string.punctuation]
+
+    sentence = sentence.lower().strip()
+
+    # Remove punctuation
+    sentence = sentence.translate(str.maketrans("", "", string.punctuation))
+
+    # Remove extra spaces
+    sentence = re.sub(r"\s+", " ", sentence)
+
+    return sentence
 
 
 def bag_of_words(tokenized_sentence, all_words):
     """
-    Convert sentence into bag-of-words vector.
+    Convert tokenized sentence into Bag of Words vector.
 
     Example:
-    sentence = ["hello", "how", "are", "you"]
-    all_words = ["hi", "hello", "price", "support"]
+    tokenized_sentence = ["hello", "price"]
+    all_words = ["hello", "support", "price"]
 
-    output = [0, 1, 0, 0]
+    output = [1, 0, 1]
     """
 
-    tokenized_sentence = clean_tokens(tokenized_sentence)
     tokenized_sentence = [stem(word) for word in tokenized_sentence]
 
     bag = np.zeros(len(all_words), dtype=np.float32)
