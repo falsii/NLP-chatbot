@@ -403,7 +403,7 @@ screenshots/evaluation_report.png
 
 Then display them in README:
 
-```markdown
+<!-- ```markdown
 ## Streamlit Chat UI
 
 ![Streamlit Chat UI](screenshots/streamlit_chat_ui.png)
@@ -421,7 +421,7 @@ Then display them in README:
 ![Evaluation Report](screenshots/evaluation_report.png)
 ```
 
----
+--- -->
 
 ## Example Questions
 
