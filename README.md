@@ -457,23 +457,3 @@ This project demonstrates an end-to-end offline chatbot system:
 * API and UI integration
 
 ---
-
-## Future Improvements
-
-Possible next improvements:
-
-* Add more real product-specific data
-* Improve FAQ retrieval with better preprocessing
-* Add SQLite-based user sessions
-* Add authentication for admin dashboard
-* Add Docker setup
-* Add unit tests with pytest
-* Add model versioning
-* Add better confusion matrix visualization
-* Add active learning workflow for uncertain predictions
-
----
-
-## Resume Summary
-
-Built an offline NLP chatbot using PyTorch with both Bag-of-Words and custom LSTM intent classifiers trained from scratch, integrated with TF-IDF FAQ retrieval, rule-based safety handling, Streamlit UI, FastAPI backend, SQLite logging, user feedback collection, admin dashboard, and model evaluation without using LLMs, APIs, or pretrained models.
