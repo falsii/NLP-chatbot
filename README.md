@@ -1,459 +1,286 @@
 # Offline PyTorch NLP Chatbot
 
-An offline NLP chatbot built using **PyTorch** and classical NLP techniques. The chatbot is trained from scratch without using LLMs, API keys, or pretrained models.
+An end-to-end, fully local NLP chatbot built with PyTorch. It combines intent classification, TF-IDF FAQ retrieval, confidence-based fallback, a rule-engine hook, a Streamlit chat interface, a FastAPI service, and SQLite-backed monitoring—without an LLM, an API key, or a pretrained language model.
 
-The project includes intent classification, rule-based safety handling, TF-IDF FAQ retrieval, Streamlit UI, FastAPI backend, SQLite logging, feedback collection, admin dashboard, model evaluation, and a custom LSTM classifier.
+## What this project demonstrates
 
----
+- Training text classifiers from scratch with PyTorch
+- Bag-of-Words and LSTM intent-classification approaches
+- Local FAQ retrieval with TF-IDF and cosine similarity
+- Confidence-aware routing and unknown-query fallback
+- Interactive chat and monitoring interfaces with Streamlit
+- REST API development with FastAPI and Pydantic
+- Chat logging and feedback collection with SQLite
+- Offline evaluation and model comparison
 
-## Project Objective
-
-The goal of this project is to build a practical offline chatbot that can answer product-related questions, guide users to the correct feature, handle common support queries, and improve over time using feedback data.
-
-This project is designed as a portfolio-ready machine learning and NLP project for demonstrating:
-
-* NLP preprocessing
-* PyTorch model training
-* Intent classification
-* TF-IDF based retrieval
-* Rule-based safety handling
-* API development using FastAPI
-* UI development using Streamlit
-* SQLite logging and feedback collection
-* Model evaluation and improvement workflow
-* Custom LSTM model training from scratch
-
----
-
-## Key Features
-
-* Offline chatbot with no external API dependency
-* No LLMs, no API keys, no pretrained models
-* Custom PyTorch intent classifier trained from scratch
-* Bag-of-Words neural network model
-* Custom LSTM intent classifier with trainable embeddings
-* Rule-based safety layer for sensitive and abusive content
-* Shortcut rules for common messages like hi, bye, help, price, ok
-* Fuzzy matching for small spelling mistakes
-* TF-IDF FAQ retrieval for local product/support questions
-* Confidence-based fallback for unknown questions
-* Terminal chatbot interface
-* Streamlit chat UI for portfolio demo
-* FastAPI backend for API integration
-* SQLite database logging
-* Helpful / not helpful feedback collection
-* Admin dashboard for monitoring chatbot performance
-* Evaluation scripts with accuracy, unknown rate, and wrong prediction report
-* Feedback-based improvement report generation
-* Model comparison between Bag-of-Words and LSTM classifiers
-
----
-
-## Tech Stack
-
-| Area                 | Technology                                   |
-| -------------------- | -------------------------------------------- |
-| Programming Language | Python                                       |
-| Deep Learning        | PyTorch                                      |
-| NLP                  | Tokenization, stemming, Bag-of-Words, TF-IDF |
-| ML Utilities         | NumPy, scikit-learn                          |
-| UI                   | Streamlit                                    |
-| Backend API          | FastAPI                                      |
-| Server               | Uvicorn                                      |
-| Database             | SQLite                                       |
-| Data Format          | JSON                                         |
-| Dashboard            | Streamlit + Pandas                           |
-
----
-
-## System Architecture
+## How it works
 
 ```mermaid
-flowchart TD
-    A[User Message] --> B[Rule-Based Safety Layer]
-    B --> C{Rule Matched?}
-    C -->|Yes| D[Return Rule Response]
-    C -->|No| E[PyTorch Intent Classifier]
-
-    E --> F[Predicted Intent + Confidence]
-    F --> G{FAQ Suitable?}
-    G -->|Yes| H[TF-IDF FAQ Retrieval]
-    H --> I{FAQ Match Found?}
-    I -->|Yes| J[Return FAQ Answer]
-    I -->|No| K[Confidence Check]
-
-    G -->|No| K
-    K --> L{Confidence High?}
-    L -->|Yes| M[Return Intent Response]
-    L -->|No| N[Return Unknown Response]
-
-    D --> O[Save Chat Log]
-    J --> O
-    M --> O
-    N --> O
-
-    O --> P[User Feedback]
-    P --> Q[Admin Dashboard]
-    Q --> R[Improvement Report]
-    R --> S[Update Dataset / FAQ / Rules]
-    S --> T[Retrain and Evaluate]
+flowchart LR
+    A[User message] --> B[Rule engine]
+    B -->|Handled| G[Response]
+    B -->|Not handled| C[Intent classifier]
+    C --> D{FAQ-style query?}
+    D -->|Yes| E[TF-IDF FAQ search]
+    E -->|Score >= 0.35| G
+    E -->|No match| F{Confidence >= 0.85?}
+    D -->|No| F
+    F -->|Yes| H[Intent response]
+    F -->|No| I[Unknown fallback]
+    H --> G
+    I --> G
+    G --> J[Optional API log and feedback]
+    J --> K[SQLite and admin dashboard]
 ```
 
----
+The default application uses the Bag-of-Words classifier in `src/chat.py`. A separate LSTM implementation is available in `src/chat_lstm.py` for comparison.
 
-## Models Used
+## Features
 
-### 1. Bag-of-Words Feed Forward Neural Network
+| Area | Included |
+| --- | --- |
+| Intent models | Feed-forward Bag-of-Words model and custom LSTM model |
+| Retrieval | TF-IDF FAQ search with cosine similarity |
+| Routing | Rule hook, FAQ routing, `0.85` model-confidence fallback |
+| Interfaces | Terminal chat and Streamlit chat UI |
+| API | FastAPI chat, feedback, log, summary, and health endpoints |
+| Persistence | SQLite chat logs and user feedback |
+| Monitoring | Streamlit admin dashboard and CSV export |
+| Evaluation | Accuracy, unknown rate, source distribution, errors, and confusion counts |
+| Privacy | Local inference; no external AI service or API key |
 
-The first model converts user text into a Bag-of-Words vector and classifies the intent using a feed-forward neural network.
+## Tech stack
 
-Flow:
+- Python 3.13+
+- PyTorch
+- NumPy and scikit-learn
+- NLTK Porter stemmer (no corpus download required)
+- FastAPI, Pydantic, and Uvicorn
+- Streamlit and Pandas
+- SQLite
+- `uv` for dependency management
+
+## Repository layout
 
 ```text
-Text → Tokenization → Stemming → Bag of Words → Neural Network → Intent
+NLP-chatbot/
+├── api/
+│   └── main.py                  # FastAPI application
+├── app/
+│   ├── streamlit_app.py         # Chat interface
+│   └── admin_dashboard.py       # Logs and feedback dashboard
+├── data/
+│   ├── intents.json             # Intent patterns and responses
+│   ├── faq.json                 # Local FAQ knowledge base
+│   └── test_questions.json      # Evaluation examples
+├── model/
+│   ├── chatbot_model.pth        # Bag-of-Words checkpoint
+│   └── lstm_chatbot_model.pth   # LSTM checkpoint
+├── scripts/
+│   ├── compare_models.py
+│   ├── generate_improvement_report.py
+│   └── retrain_and_evaluate.py
+├── src/
+│   ├── chat.py                  # Default inference pipeline and CLI
+│   ├── chat_lstm.py             # LSTM inference pipeline and CLI
+│   ├── database.py              # SQLite storage helpers
+│   ├── evaluate.py              # Bag-of-Words evaluation
+│   ├── evaluate_lstm.py         # LSTM evaluation
+│   ├── model.py                 # Feed-forward network
+│   ├── lstm_model.py            # LSTM network
+│   ├── nltk_utils.py            # Tokenization, stemming, Bag-of-Words
+│   ├── retrieval.py             # TF-IDF FAQ retriever
+│   ├── rules.py                 # Rule-engine module
+│   ├── train.py                 # Bag-of-Words training
+│   └── train_lstm.py            # LSTM training
+├── pyproject.toml
+└── uv.lock
 ```
 
-### 2. LSTM Intent Classifier
+The checked-in datasets currently contain 15 intents, 20 FAQ entries, and 53 evaluation questions.
 
-The second model uses a custom LSTM network trained from scratch. It uses a trainable embedding layer and does not use any pretrained embeddings.
+## Getting started
 
-Flow:
+### Prerequisites
 
-```text
-Text → Token IDs → Embedding Layer → LSTM → Fully Connected Layer → Intent
-```
+- [Python 3.13 or newer](https://www.python.org/downloads/)
+- [`uv`](https://docs.astral.sh/uv/getting-started/installation/) (recommended)
 
----
-
-## Dataset
-
-The project uses local JSON files.
-
-### `data/intents.json`
-
-Contains intent categories, training patterns, and predefined responses.
-
-Example intents:
-
-* greetings
-* goodbye
-* thanks
-* product_info
-* pricing
-* support
-* complaint
-* bot_identity
-* bot_capability
-* sensitive_content
-* abusive_language
-* unknown
-
-### `data/faq.json`
-
-Contains local FAQ questions and answers used by the TF-IDF retrieval system.
-
-Example categories:
-
-* account
-* pricing
-* features
-* support
-* billing
-* security
-
-### `data/test_questions.json`
-
-Contains test messages and expected intents for evaluating chatbot accuracy.
-
----
-
-## Installation
-
-### 1. Clone the repository
+### Install
 
 ```bash
-git clone https://github.com/your-username/offline-pytorch-nlp-chatbot.git
-cd offline-pytorch-nlp-chatbot
+git clone https://github.com/falsii/NLP-chatbot.git
+cd NLP-chatbot
+uv sync
 ```
 
-### 2. Create virtual environment
+The trained model checkpoints are included, so retraining is not normally required before running the application.
 
-For Windows:
+If you prefer `pip`, create and activate a virtual environment, then install the project dependencies from `pyproject.toml`:
 
 ```bash
-python -m venv venv
-venv\Scripts\activate
+python -m venv .venv
+
+# Windows PowerShell
+.venv\Scripts\Activate.ps1
+
+# macOS/Linux
+source .venv/bin/activate
+
+python -m pip install -e .
 ```
 
-For Mac/Linux:
+## Run the project
+
+### Streamlit chat UI
 
 ```bash
-python -m venv venv
-source venv/bin/activate
+uv run streamlit run app/streamlit_app.py
 ```
 
-### 3. Install dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
----
-
-## Training
-
-### Train Bag-of-Words model
-
-```bash
-python src/train.py
-```
-
-This creates:
-
-```text
-model/chatbot_model.pth
-```
-
-### Train LSTM model
-
-```bash
-python src/train_lstm.py
-```
-
-This creates:
-
-```text
-model/lstm_chatbot_model.pth
-```
-
----
-
-## Running the Chatbot
+Streamlit prints the local application URL, normally `http://localhost:8501`.
 
 ### Terminal chatbot
 
 ```bash
-python src/chat.py
+uv run python src/chat.py
 ```
+
+Type `quit` or `exit` to close the session.
 
 ### LSTM terminal chatbot
 
 ```bash
-python src/chat_lstm.py
+uv run python src/chat_lstm.py
 ```
 
----
-
-## Streamlit Chat UI
+### FastAPI service
 
 ```bash
-streamlit run app/streamlit_app.py
+uv run uvicorn api.main:app --reload
 ```
 
-The UI includes:
+Useful URLs:
 
-* Chat interface
-* Bot responses
-* Source information
-* Intent prediction
-* Confidence score
-* FAQ match score
-* Debug details
+- API documentation: `http://127.0.0.1:8000/docs`
+- Health check: `http://127.0.0.1:8000/health`
 
----
-
-## FastAPI Backend
-
-Run the API server:
+### Admin dashboard
 
 ```bash
-uvicorn api.main:app --reload
+uv run streamlit run app/admin_dashboard.py
 ```
 
-Open Swagger UI:
+The API and admin dashboard create `database/chatbot_logs.db` automatically when needed.
 
-```text
-http://127.0.0.1:8000/docs
+## API reference
+
+| Method | Path | Purpose |
+| --- | --- | --- |
+| `GET` | `/` | Basic service status |
+| `GET` | `/health` | Model readiness check |
+| `POST` | `/chat` | Generate a reply and save the interaction |
+| `POST` | `/feedback` | Attach feedback to a chat log |
+| `GET` | `/logs?limit=50` | Return recent chat logs (`1`–`200`) |
+| `GET` | `/feedback-summary` | Return feedback, source, and intent counts |
+
+Example chat request:
+
+```bash
+curl -X POST http://127.0.0.1:8000/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message":"How do I reset my password?","include_debug":true}'
 ```
 
-Example request:
-
-```json
-{
-  "message": "how do i reset my password",
-  "include_debug": true
-}
-```
-
-Example response:
+Example response shape:
 
 ```json
 {
   "reply": "You can reset your password by clicking Forgot Password on the login page and following the instructions.",
   "log_id": 1,
   "intent": "support",
-  "confidence": 0.82,
+  "confidence": 0.92,
   "source": "faq_retrieval",
-  "faq_match_score": 0.91,
+  "faq_match_score": 1.0,
   "faq_question": "How do I reset my password?"
 }
 ```
 
----
-
-## Admin Dashboard
-
-Run:
+Submit feedback using the returned `log_id`:
 
 ```bash
-streamlit run app/admin_dashboard.py
+curl -X POST http://127.0.0.1:8000/feedback \
+  -H "Content-Type: application/json" \
+  -d '{"log_id":1,"feedback":"helpful","feedback_comment":"Solved my issue"}'
 ```
 
-The dashboard shows:
+`feedback` must be either `helpful` or `not_helpful`.
 
-* Total chat logs
-* Helpful vs not helpful feedback
-* Unknown rate
-* Average confidence
-* Source breakdown
-* Intent distribution
-* Recent chat logs
-* Not helpful responses
-* Unknown / low-confidence messages
-* CSV export
-* Improvement candidates
+## Training
 
----
+Train the default Bag-of-Words model:
+
+```bash
+uv run python src/train.py
+```
+
+Train the LSTM model:
+
+```bash
+uv run python src/train_lstm.py
+```
+
+The scripts write their checkpoints to `model/chatbot_model.pth` and `model/lstm_chatbot_model.pth`. Both training pipelines use deterministic seeds and an 80/20 train-validation split.
 
 ## Evaluation
 
-### Evaluate Bag-of-Words model
-
 ```bash
-python src/evaluate.py
+# Evaluate the Bag-of-Words model
+uv run python src/evaluate.py
+
+# Evaluate the LSTM model
+uv run python src/evaluate_lstm.py
+
+# Run both evaluations
+uv run python scripts/compare_models.py
+
+# Retrain and evaluate the default model
+uv run python scripts/retrain_and_evaluate.py
 ```
 
-### Evaluate LSTM model
+Evaluation reads `data/test_questions.json` and reports accuracy, unknown rate, response-source counts, predicted-intent counts, incorrect predictions, and confusion counts.
 
-```bash
-python src/evaluate_lstm.py
-```
+## Customize the chatbot
 
-### Compare both models
+- Add or revise intent examples and responses in `data/intents.json`, then retrain the selected model.
+- Add product or support answers to `data/faq.json`. The TF-IDF index is rebuilt when the chatbot starts, so FAQ-only edits do not require model training.
+- Adjust FAQ similarity in `src/retrieval.py` and model confidence thresholds in `src/chat.py` or `src/chat_lstm.py`.
+- Extend `src/rules.py` for deterministic safety, identity, or shortcut behavior.
+- Add evaluation cases to `data/test_questions.json` before comparing model changes.
 
-```bash
-python scripts/compare_models.py
-```
-
-Evaluation includes:
-
-* Total test questions
-* Correct predictions
-* Wrong predictions
-* Accuracy
-* Unknown rate
-* Source breakdown
-* Intent breakdown
-* Confusion matrix
-
----
-
-## Feedback-Based Improvement Workflow
-
-The chatbot logs user interactions and feedback in SQLite.
-
-Generate improvement report:
-
-```bash
-python scripts/generate_improvement_report.py
-```
-
-This creates:
-
-```text
-data/improvement_candidates.json
-```
-
-Improvement workflow:
-
-1. Collect chat logs and feedback
-2. Review not-helpful and low-confidence messages
-3. Generate improvement candidates
-4. Add missing examples to `data/intents.json`
-5. Add missing FAQ answers to `data/faq.json`
-6. Improve rules in `src/rules.py`
-7. Retrain the model
-8. Run evaluation
-9. Test again
-
----
-
-## Screenshots
-
-Add screenshots in the `screenshots/` folder.
-
-Recommended screenshots:
-
-```text
-screenshots/streamlit_chat_ui.png
-screenshots/fastapi_docs.png
-screenshots/admin_dashboard.png
-screenshots/evaluation_report.png
-```
-
-Then display them in README:
-
-<!-- ```markdown
-## Streamlit Chat UI
-
-![Streamlit Chat UI](screenshots/streamlit_chat_ui.png)
-
-## FastAPI Docs
-
-![FastAPI Docs](screenshots/fastapi_docs.png)
-
-## Admin Dashboard
-
-![Admin Dashboard](screenshots/admin_dashboard.png)
-
-## Evaluation Report
-
-![Evaluation Report](screenshots/evaluation_report.png)
-```
-
---- -->
-
-## Example Questions
-
-Try asking:
+Example questions to try:
 
 ```text
 hi
 what can you do
 are you a human
-how do i reset my password
-how do i contact support
+how do I reset my password
+how do I contact support
 how much does the product cost
-where can i see my billing details
-i need medical help
-you are stupid
+where can I see my billing details
 random qwerty text
 ```
 
----
+## Current repository status
 
-## Project Highlights
+The current `master` snapshot is a work in progress:
 
-This project demonstrates an end-to-end offline chatbot system:
+- `src/rules.py` is empty, while both inference pipelines import `apply_rules`; application startup currently fails until that function is restored or implemented.
+- `tests/test_chatbot.py` is an empty test scaffold.
+- `scripts/generate_improvement_report.py` currently duplicates the retrain/evaluate workflow and does not generate `data/improvement_candidates.json`.
 
-* Local model training
-* Local inference
-* No external AI API
-* No LLM dependency
-* Rule-based safety handling
-* Retrieval-based FAQ answering
-* Evaluation and monitoring
-* Feedback loop for improvement
-* API and UI integration
+These gaps are documented here so setup failures are not mistaken for dependency or model-checkpoint problems.
 
----
+## License
+
+No license file is currently included. Add a license before redistributing or accepting external contributions.
